@@ -1,50 +1,24 @@
-# React + TypeScript + Vite
+# React App Deployment on S3 & CloudFront
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+To deploy the React application, Static Sites (Not for Next), follow these steps:
 
-Currently, two official plugins are available:
+1. **Build the Application**  
+   After building the application, a `dist` folder will be generated.  
+   Upload all the contents of this `dist` folder to the S3 bucket.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+   ![S3 Bucket Upload](public/Screenshot from 2024-09-20 21-10-40.png)
 
-## Expanding the ESLint configuration
+2. **Configure CloudFront**  
+   Use CloudFront to map the S3 bucket so that public access is restricted.  
+   Below is an example of the CloudFront configuration:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+   ![CloudFront Configuration](public/Screenshot from 2024-09-20 21-22-12.png)
 
-- Configure the top-level `parserOptions` property like this:
+3. **Add HTTPS Certificates & Error Pages**  
+   To ensure secure access via HTTPS, add SSL/TLS certificates.  
+   Additionally, configure error pages to handle routes effectively.  
+   (Note: This step may not be completed if a custom domain isn't set up yet.)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+   Here's how the deployed frontend looks:
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+   ![Deployed Frontend](public/Screenshot from 2024-09-20 21-24-52.png)
